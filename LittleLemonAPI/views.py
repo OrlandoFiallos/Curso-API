@@ -40,7 +40,8 @@ def menu_items(request):
         if search:
             items = items.filter(title__istartswith=search)
         if ordering:
-            items = items.order_by(ordering)
+            ordering_fields = ordering.split(',')
+            items = items.order_by(*ordering_fields)
             
         serialized_item = MenuItemSerializer(items, many=True)
         return Response(serialized_item.data)
@@ -51,8 +52,8 @@ def menu_items(request):
         serialized_item.save()
         return Response(serialized_item.data, status.HTTP_201_CREATED)
     
-@api_view()
-def single_item(request,id):
-    item = get_object_or_404(MenuItem,pk=id)
+@api_view(['GET','PUT','PATCH','DELETE'])
+def single_item(request,pk):
+    item = get_object_or_404(MenuItem,pk=pk)
     serialized_item = MenuItemSerializer(item)
     return Response(serialized_item.data)  
