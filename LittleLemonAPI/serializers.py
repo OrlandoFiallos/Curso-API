@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import MenuItem,Category
 from decimal import Decimal
 from rest_framework.validators import UniqueValidator
+from rest_framework.validators import UniqueTogetherValidator
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,7 +10,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id','slug','title']
 
 class MenuItemSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=255,validators=[UniqueValidator(queryset=MenuItem.objects.all())])
+    # title = serializers.CharField(max_length=255,validators=[UniqueValidator(queryset=MenuItem.objects.all())])
     stock = serializers.IntegerField(source='inventory')
     price_after_tax = serializers.SerializerMethodField(method_name='calculate_tax')
     category = CategorySerializer(read_only = True)
@@ -48,6 +49,11 @@ class MenuItemSerializer(serializers.ModelSerializer):
         #         ]
         #     }
         # }
-        
+        validators = [
+            UniqueTogetherValidator(
+                queryset=MenuItem.objects.all(),
+                fields=['title','price']
+            )
+        ]
     def calculate_tax(self, product:MenuItem):
         return product.price * Decimal(1.1)
