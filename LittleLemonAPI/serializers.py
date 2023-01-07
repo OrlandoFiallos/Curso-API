@@ -12,6 +12,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
     price_after_tax = serializers.SerializerMethodField(method_name='calculate_tax')
     category = CategorySerializer(read_only = True)
     category_id = serializers.IntegerField(write_only=True) 
+    price = serializers.DecimalField(max_digits=6, decimal_places=2, min_value=2)
     
     class Meta:
         model = MenuItem
