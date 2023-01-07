@@ -15,12 +15,20 @@ class MenuItemSerializer(serializers.ModelSerializer):
     #price = serializers.DecimalField(max_digits=6, decimal_places=2, min_value=2)
     
     #Métodos para validar campos
-    def validate_price(self,value):
-        if value < 2:
-            raise serializers.ValidationError('Price should not be less than 2')
-    def validate_stock(self, value):
-        if value < 0:
+    # def validate_price(self,value):
+    #     if value < 2:
+    #         raise serializers.ValidationError('Price should not be less than 2')
+    # def validate_stock(self, value):
+    #     if value < 0:
+    #         raise serializers.ValidationError('Stock cannot be negative')
+    
+    #Método validate para validar campos
+    def validate(self, attrs):
+        if(attrs['price']<2):
+            raise serializers.ValidationError('Price should not be less than 2.0')
+        if(attrs['inventory']<0):
             raise serializers.ValidationError('Stock cannot be negative')
+        return super().validate(attrs)
     class Meta:
         model = MenuItem
         #fields = ['id','title','price','inventory']
