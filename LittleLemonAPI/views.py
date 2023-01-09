@@ -72,4 +72,6 @@ class MenuItemsViewSet(viewsets.ModelViewSet):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
     ordering_fields = ['price','inventory']
-    search_fields = ['title']
+    search_fields = ['title','category__title']
+    # la categoría se estableció como un campo relacionado con el modelo MenuItem en la clase MenuItemSerializer , y los clientes buscarán en el campo de título del modelo de categoría.
+    #La convención de nomenclatura para buscar en el modelo relacionado es, RelatedModelName_FieldName
