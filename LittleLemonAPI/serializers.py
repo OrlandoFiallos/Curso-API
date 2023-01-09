@@ -28,14 +28,15 @@ class MenuItemSerializer(serializers.ModelSerializer):
     
     #Método validate para validar campos
     def validate(self, attrs):
+        attrs['title'] = bleach.clean(attrs['title'])
         if(attrs['price']<2):
             raise serializers.ValidationError('Price should not be less than 2.0')
         if(attrs['inventory']<0):
             raise serializers.ValidationError('Stock cannot be negative')
         return super().validate(attrs)
     #Sanitizando datos del campo title
-    def validate_title(self,value):
-        return bleach.clean(value)
+    # def validate_title(self,value):
+    #     return bleach.clean(value)
     class Meta:
         model = MenuItem
         #fields = ['id','title','price','inventory']
