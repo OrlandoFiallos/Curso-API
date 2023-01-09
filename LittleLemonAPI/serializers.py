@@ -3,6 +3,7 @@ from .models import MenuItem,Category
 from decimal import Decimal
 from rest_framework.validators import UniqueValidator
 from rest_framework.validators import UniqueTogetherValidator
+import bleach
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,6 +33,9 @@ class MenuItemSerializer(serializers.ModelSerializer):
         if(attrs['inventory']<0):
             raise serializers.ValidationError('Stock cannot be negative')
         return super().validate(attrs)
+    #Sanitizando datos del campo title
+    def validate_title(self,value):
+        return bleach.clean(value)
     class Meta:
         model = MenuItem
         #fields = ['id','title','price','inventory']
