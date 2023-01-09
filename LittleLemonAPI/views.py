@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.core.paginator import Paginator, EmptyPage
+from rest_framework import viewsets
 
 # Create your views here.
 class CategoryView(generics.ListCreateAPIView):
@@ -66,3 +67,8 @@ def single_item(request,pk):
     item = get_object_or_404(MenuItem,pk=pk)
     serialized_item = MenuItemSerializer(item)
     return Response(serialized_item.data)  
+
+class MenuItemsViewSet(viewsets.ModelViewSet):
+    queryset = MenuItem.objects.all()
+    serializer_class = MenuItemSerializer
+    ordering_fields = ['price','inventory']
