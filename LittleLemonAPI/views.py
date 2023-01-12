@@ -8,7 +8,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.core.paginator import Paginator, EmptyPage
 from rest_framework import viewsets
-
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 # Create your views here.
 class CategoryView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
@@ -75,3 +76,8 @@ class MenuItemsViewSet(viewsets.ModelViewSet):
     search_fields = ['title','category__title']
     # la categoría se estableció como un campo relacionado con el modelo MenuItem en la clase MenuItemSerializer , y los clientes buscarán en el campo de título del modelo de categoría.
     #La convención de nomenclatura para buscar en el modelo relacionado es, RelatedModelName_FieldName
+    
+@api_view()
+@permission_classes([IsAuthenticated])
+def secret(request):
+    return Response({'message':'Some secret message'})

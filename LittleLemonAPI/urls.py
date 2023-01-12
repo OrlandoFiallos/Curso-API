@@ -9,5 +9,6 @@ urlpatterns = [
     path('menu-items',views.MenuItemsViewSet.as_view({'get':'list'})),
     path('menu-items/<int:pk>',views.MenuItemsViewSet.as_view({'get':'retrieve'})),
     path('categories/',views.CategoryView.as_view()),
-    path('categories/<int:pk>',views.SingleCategoryItemView.as_view())
+    path('categories/<int:pk>',views.SingleCategoryItemView.as_view()),
+    path('secret/',views.secret)
 ]
