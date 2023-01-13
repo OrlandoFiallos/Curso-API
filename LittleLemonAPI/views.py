@@ -10,6 +10,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view,permission_classes, throttle_classes
 from rest_framework.throttling import AnonRateThrottle
+from rest_framework.throttling import UserRateThrottle
 # Create your views here.
 class CategoryView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
@@ -95,3 +96,10 @@ def manager_view(request):
 @throttle_classes([AnonRateThrottle])
 def throttle_check(request):
     return Response({'message':'Successfully'})
+
+#Throttling authenticated users
+@api_view()
+@permission_classes([IsAuthenticated])
+@throttle_classes([UserRateThrottle])
+def throttle_check_auth(request):
+    return Response({'message':'message for the logged in users only'})
