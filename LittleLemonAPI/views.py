@@ -2,14 +2,14 @@ from django.shortcuts import render
 from rest_framework import generics
 from .models import MenuItem,Category
 from .serializers import MenuItemSerializer, CategorySerializer
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.core.paginator import Paginator, EmptyPage
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes
+from rest_framework.decorators import api_view,permission_classes, throttle_classes
+from rest_framework.throttling import AnonRateThrottle
 # Create your views here.
 class CategoryView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
@@ -89,3 +89,9 @@ def manager_view(request):
         return Response({'message':'Only manager should see this'})
     else:
         return Response({'message':'You are not authorizated'},403)
+
+#Throttling
+@api_view()
+@throttle_classes([AnonRateThrottle])
+def throttle_check(request):
+    return Response({'message':'Successfully'})
